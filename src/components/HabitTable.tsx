@@ -16,6 +16,7 @@ import { DAYS_HE, formatDDMM, getWeekDayDates } from '../utils/weekUtils';
 import { BinaryRow } from './BinaryRow';
 import { NumericRow } from './NumericRow';
 import { ConfirmModal } from './ConfirmModal';
+import { WeeklyScoreBar } from './WeeklyScoreBar';
 
 interface Props {
   habits: Habit[];
@@ -65,6 +66,7 @@ export function HabitTable({
 
   return (
     <>
+      <WeeklyScoreBar habits={visibleHabits} weekData={weekData} />
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}

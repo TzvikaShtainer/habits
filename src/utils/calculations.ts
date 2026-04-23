@@ -61,6 +61,31 @@ export function getNumericPaceTooltip(avg: number | null, goal: number): string 
   return avg >= goal ? '✓ בקצב טוב' : '✗ מאחר בקצב';
 }
 
+export function computeWeeklyScore(
+  habits: import('../types').Habit[],
+  weekData: import('../types').WeekData,
+): number | null {
+  const percentages: number[] = [];
+
+  for (const habit of habits) {
+    if (habit.archived && !weekData[habit.id]) continue;
+    const dayData = weekData[habit.id] ?? {};
+
+    if (habit.type === 'binary') {
+      // Mirrors binaryPercentage(): greenCount / weeklyGoal * 100
+      const pct = binaryPercentage(dayData, habit.goal);
+      if (pct !== null) percentages.push(pct);
+    } else if (habit.type === 'numeric') {
+      // Mirrors numericPercentage(): average(values) / goal * 100
+      const pct = numericPercentage(dayData, habit.goal);
+      if (pct !== null) percentages.push(pct);
+    }
+  }
+
+  if (percentages.length === 0) return null;
+  return Math.round(percentages.reduce((s, v) => s + v, 0) / percentages.length);
+}
+
 export function getStreakInfo(dayData: DayData): { streakDays: Set<number>; activeStreak: number } {
   // Per-day streak count: Green increments, N/A pauses (inherits), Red/Empty resets
   const counts: number[] = Array(7).fill(0);

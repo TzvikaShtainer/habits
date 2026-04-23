@@ -7,6 +7,7 @@ import { AddHabitModal } from './components/AddHabitModal';
 import { Affirmations } from './components/Affirmations';
 import { DailyReflection } from './components/DailyReflection';
 import { SavedToast } from './components/SavedToast';
+import { RitualsSidebar } from './components/RitualsSidebar';
 
 export default function App() {
   const {
@@ -39,7 +40,7 @@ export default function App() {
 
   return (
     <div dir="rtl" className="min-h-screen bg-gray-50 dark:bg-slate-900 font-sans transition-colors">
-      <div className="max-w-6xl mx-auto px-4 py-6">
+      <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Header */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <h1 className="text-2xl font-bold text-gray-900 dark:text-slate-100">📋 מעקב הרגלים</h1>
@@ -77,55 +78,65 @@ export default function App() {
           </div>
         </div>
 
-        {/* Affirmations */}
-        <Affirmations />
+        {/* Main grid: tracker + rituals sidebar */}
+        <div className="grid grid-cols-4 gap-6 items-start">
+          <div className="col-span-3">
+            {/* Affirmations */}
+            <Affirmations />
 
-        {/* Week navigation */}
-        <div className="mb-6">
-          <WeekNav
-            currentWeekId={state.currentWeekId}
-            sortedWeekIds={sortedWeekIds}
-            onNavigate={navigateWeek}
-            onNewWeek={createNewWeek}
-          />
+            {/* Week navigation */}
+            <div className="mb-6">
+              <WeekNav
+                currentWeekId={state.currentWeekId}
+                sortedWeekIds={sortedWeekIds}
+                onNavigate={navigateWeek}
+                onNewWeek={createNewWeek}
+              />
+            </div>
+
+            {/* Main table */}
+            <HabitTable
+              habits={habitsForWeek}
+              weekData={currentWeekData}
+              weekId={state.currentWeekId}
+              isCurrentWeek={true}
+              onCycleCell={cycleBinaryCell}
+              onSetBinaryCell={setBinaryCell}
+              onSetCell={(weekId, habitId, day, val) => setCellValue(weekId, habitId, day, val)}
+              onArchive={archiveHabit}
+              onRename={renameHabit}
+              onUpdateGoal={updateHabitGoal}
+              onReorder={reorderHabits}
+            />
+
+            {/* Add habit */}
+            <div className="mt-4">
+              <button
+                onClick={() => setShowAddModal(true)}
+                className="px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 text-sm font-medium"
+              >
+                + הוסף הרגל
+              </button>
+            </div>
+
+            {/* Daily Reflection */}
+            <DailyReflection
+              weekId={state.currentWeekId}
+              reflections={state.reflections ?? {}}
+              onSave={setReflection}
+            />
+
+            {/* Keyboard hint */}
+            <p className="mt-4 text-xs text-gray-400 dark:text-slate-600 text-center">
+              ניווט: חצים · קיצורי מקלדת: 1=ירוק · 2=אדום · 3=שחור · 4=ריק · Ctrl+Z=ביטול
+            </p>
+          </div>
+
+          {/* Rituals sidebar */}
+          <div className="col-span-1">
+            <RitualsSidebar weekId={state.currentWeekId} />
+          </div>
         </div>
-
-        {/* Main table */}
-        <HabitTable
-          habits={habitsForWeek}
-          weekData={currentWeekData}
-          weekId={state.currentWeekId}
-          isCurrentWeek={true}
-          onCycleCell={cycleBinaryCell}
-          onSetBinaryCell={setBinaryCell}
-          onSetCell={(weekId, habitId, day, val) => setCellValue(weekId, habitId, day, val)}
-          onArchive={archiveHabit}
-          onRename={renameHabit}
-          onUpdateGoal={updateHabitGoal}
-          onReorder={reorderHabits}
-        />
-
-        {/* Add habit */}
-        <div className="mt-4">
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 text-sm font-medium"
-          >
-            + הוסף הרגל
-          </button>
-        </div>
-
-        {/* Daily Reflection */}
-        <DailyReflection
-          weekId={state.currentWeekId}
-          reflections={state.reflections ?? {}}
-          onSave={setReflection}
-        />
-
-        {/* Keyboard hint */}
-        <p className="mt-4 text-xs text-gray-400 dark:text-slate-600 text-center">
-          ניווט: חצים · קיצורי מקלדת: 1=ירוק · 2=אדום · 3=שחור · 4=ריק · Ctrl+Z=ביטול
-        </p>
       </div>
 
       {showAddModal && (
