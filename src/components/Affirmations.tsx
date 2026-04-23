@@ -2,11 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 
 const STORAGE_KEY = 'habit-tracker-affirmations';
 
-const DEFAULT_TEXT = `אני מספיק. אני בדרך שלי. אני בונה חיים מלאים, יום אחד בכל פעם כי אני יוצר שפע בקצב המדויק לי
-אני סומך על עצמי ועל הדרך שלי
-הכל קורה לטובתי העליונה ביותר
-לזכור מי אני רוצה להיות בעתיד
-אני מפתח משחקים במון אקטיב ומרוויח 35,000`;
+const DEFAULT_TEXT = '';
 
 function load(): string {
   return localStorage.getItem(STORAGE_KEY) ?? DEFAULT_TEXT;
