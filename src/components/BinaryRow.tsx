@@ -29,7 +29,7 @@ interface Props {
 
 export function BinaryRow({
   habit, dayData, isEven, rowIdx, totalBinaryRows,
-  weekId, isDraggingActive, onCycleCell, onSetValue, onArchive, onRename, onUpdateGoal,
+  weekId, isDraggingActive: _isDraggingActive, onCycleCell, onSetValue, onArchive, onRename, onUpdateGoal,
 }: Props) {
   const [editing, setEditing] = useState(false);
   const [nameVal, setNameVal] = useState(habit.name);

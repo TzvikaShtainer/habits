@@ -16,7 +16,7 @@ interface Props {
   onUpdateGoal: (goal: number | null) => void;
 }
 
-export function NumericRow({ habit, dayData, isEven, weekId, isDraggingActive, onSetCell, onArchive, onRename, onUpdateGoal }: Props) {
+export function NumericRow({ habit, dayData, isEven, weekId: _weekId, isDraggingActive: _isDraggingActive, onSetCell, onArchive, onRename, onUpdateGoal }: Props) {
   const [editingDay, setEditingDay] = useState<number | null>(null);
   const [inputVal, setInputVal] = useState('');
   const [editingName, setEditingName] = useState(false);
@@ -29,7 +29,7 @@ export function NumericRow({ habit, dayData, isEven, weekId, isDraggingActive, o
   const total = numericTotal(dayData);
   const avg = numericAverage(dayData);
   const pct = numericPercentage(dayData, habit.goal);
-  const avgMeetsGoal = habit.goal !== null && avg !== null && avg >= habit.goal;
+
   const rowBg = isEven ? 'bg-white dark:bg-slate-800' : 'bg-gray-50 dark:bg-slate-900';
 
   const style = {
