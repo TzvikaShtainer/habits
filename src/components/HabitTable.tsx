@@ -30,11 +30,12 @@ interface Props {
   onRename: (habitId: string, name: string) => void;
   onUpdateGoal: (habitId: string, goal: number | null) => void;
   onReorder: (activeId: string, overId: string) => void;
+  onLoadExamples?: () => void;
 }
 
 export function HabitTable({
   habits, weekData, weekId,
-  onCycleCell, onSetBinaryCell, onSetCell, onArchive, onRename, onUpdateGoal, onReorder,
+  onCycleCell, onSetBinaryCell, onSetCell, onArchive, onRename, onUpdateGoal, onReorder, onLoadExamples,
 }: Props) {
   const [pendingArchive, setPendingArchive] = useState<string | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -45,7 +46,7 @@ export function HabitTable({
   );
 
   const dayDates = getWeekDayDates(weekId);
-  const visibleHabits = habits.filter((h) => !h.archived || weekData[h.id]);
+  const visibleHabits = habits.filter((h) => !h.archived);
   const binaryHabits = visibleHabits.filter((h) => h.type === 'binary');
   const numericHabits = visibleHabits.filter((h) => h.type === 'numeric');
   const activeHabit = activeId ? visibleHabits.find((h) => h.id === activeId) : null;
@@ -63,6 +64,28 @@ export function HabitTable({
   }
 
   const numericRowOffset = binaryHabits.length;
+
+  if (visibleHabits.length === 0) {
+    return (
+      <>
+        <WeeklyScoreBar habits={[]} weekData={weekData} />
+        <div className="flex flex-col items-center justify-center py-16 gap-4 text-center">
+          <p className="text-lg font-semibold text-gray-600 dark:text-slate-300" style={{ fontFamily: 'Rubik, sans-serif' }}>
+            ברוכים הבאים! אין לכם הרגלים עדיין.
+          </p>
+          {onLoadExamples && (
+            <button
+              onClick={onLoadExamples}
+              className="px-6 py-3 rounded-xl bg-blue-500 text-white hover:bg-blue-600 text-base font-semibold shadow-md transition-colors"
+              style={{ fontFamily: 'Rubik, sans-serif' }}
+            >
+              טען הרגלים לדוגמה
+            </button>
+          )}
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -145,7 +168,7 @@ export function HabitTable({
 
       {pendingArchive && (
         <ConfirmModal
-          message="ההרגל יוסתר משבועות עתידיים, אך הנתונים ההיסטוריים יישמרו."
+          message="האם למחוק את ההרגל לצמיתות?"
           onConfirm={() => { onArchive(pendingArchive); setPendingArchive(null); }}
           onCancel={() => setPendingArchive(null)}
         />

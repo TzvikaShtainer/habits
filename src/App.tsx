@@ -16,7 +16,7 @@ export default function App() {
     setReflection, undo,
     addHabit, archiveHabit, renameHabit, updateHabitGoal, reorderHabits,
     createNewWeek, navigateWeek,
-    exportState, importState,
+    exportState, importState, loadExampleHabits,
   } = useAppState();
 
   const { dark, toggle: toggleDark } = useDarkMode();
@@ -36,7 +36,7 @@ export default function App() {
   }, [undo]);
 
   const currentWeekData = state.weeks[state.currentWeekId] ?? {};
-  const habitsForWeek = state.habits.filter((h) => !h.archived || !!currentWeekData[h.id]);
+  const habitsForWeek = state.habits.filter((h) => !h.archived);
 
   return (
     <div dir="rtl" className="min-h-screen bg-gray-50 dark:bg-slate-900 font-sans transition-colors">
@@ -109,6 +109,7 @@ export default function App() {
               onRename={renameHabit}
               onUpdateGoal={updateHabitGoal}
               onReorder={reorderHabits}
+              onLoadExamples={loadExampleHabits}
             />
             </div>
 

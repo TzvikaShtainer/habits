@@ -139,7 +139,7 @@ export function useAppState() {
   const archiveHabit = useCallback((habitId: string) => {
     setState((prev) => ({
       ...prev,
-      habits: prev.habits.map((h) => (h.id === habitId ? { ...h, archived: true } : h)),
+      habits: prev.habits.filter((h) => h.id !== habitId),
     }));
   }, []);
 
@@ -198,6 +198,13 @@ export function useAppState() {
     URL.revokeObjectURL(url);
   }, [state]);
 
+  const loadExampleHabits = useCallback(() => {
+    setState((prev) => {
+      pushHistory(prev);
+      return { ...prev, habits: DEFAULT_HABITS };
+    });
+  }, []);
+
   const importState = useCallback((file: File) => {
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -230,5 +237,6 @@ export function useAppState() {
     navigateWeek,
     exportState,
     importState,
+    loadExampleHabits,
   };
 }
