@@ -132,7 +132,7 @@ export function BinaryRow({
   return (
     <tr ref={setNodeRef} style={style} className={`${rowBg} transition-opacity`}>
       {/* Habit name — sticky start-0 = right in RTL */}
-      <td className={`border border-gray-200 dark:border-slate-700 px-3 py-2 sticky start-0 z-10 ${rowBg} min-w-[160px] max-w-[220px]`}>
+      <td className={`border border-gray-200 dark:border-slate-700 px-2 py-2 sticky start-0 z-10 ${rowBg} w-auto min-w-[110px] max-w-[180px]`}>
         <div className="flex items-center gap-2">
           <button
             onClick={onArchive}
@@ -178,13 +178,13 @@ export function BinaryRow({
           : 'focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-1 dark:focus:ring-offset-slate-900';
 
         return (
-          <td key={day} className="border border-gray-200 dark:border-slate-700 p-0">
-            <div className="flex items-center justify-center min-h-[40px]">
+          <td key={day} className="border border-gray-200 dark:border-slate-700 p-0 w-[35px]">
+            <div className="flex items-center justify-center min-h-[36px]">
             <button
               id={`bin-${rowIdx}-${day}`}
               onClick={() => handleCycleCell(day)}
               onKeyDown={(e) => handleKeyDown(e, day)}
-              className={`w-8 h-8 rounded cursor-pointer transition-colors flex items-center justify-center ${CELL_BG[val] ?? CELL_BG[0]} ${ringClass} ${isPopping ? 'animate-pop' : ''}`}
+              className={`w-7 h-7 sm:w-8 sm:h-8 rounded cursor-pointer transition-colors flex items-center justify-center ${CELL_BG[val] ?? CELL_BG[0]} ${ringClass} ${isPopping ? 'animate-pop' : ''}`}
               aria-label={`יום ${day + 1}`}
             >
               {val === 1 && inStreak && (

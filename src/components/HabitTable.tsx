@@ -73,23 +73,23 @@ export function HabitTable({
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm">
-          <table className="border-collapse min-w-[700px] w-full text-sm">
+        <div className="rounded-xl border border-gray-200 dark:border-slate-700 shadow-sm">
+          <table className="border-collapse min-w-[560px] w-full text-xs sm:text-sm">
             <thead>
-              <tr className="bg-gray-100 dark:bg-slate-800">
-                <th className="border border-gray-200 dark:border-slate-700 px-3 py-3 text-start font-semibold text-gray-700 dark:text-slate-200 sticky start-0 z-20 bg-gray-100 dark:bg-slate-800 min-w-[160px]">
+              <tr className="bg-gray-100 dark:bg-slate-800 sticky top-[52px] z-10">
+                <th className="border border-gray-200 dark:border-slate-700 px-2 sm:px-3 py-2 sm:py-3 text-start font-semibold text-gray-700 dark:text-slate-200 sticky start-0 z-20 bg-gray-100 dark:bg-slate-800 w-auto min-w-[110px]">
                   שם ההרגל
                 </th>
                 {DAYS_HE.map((day, i) => (
-                  <th key={day} className="border border-gray-200 dark:border-slate-700 px-4 py-3 text-center font-semibold text-gray-800 dark:text-slate-100 whitespace-nowrap">
-                    <div className="text-base">{day}</div>
-                    <div className="text-xs font-normal text-gray-500 dark:text-slate-400 mt-0.5" dir="ltr">{formatDDMM(dayDates[i])}</div>
+                  <th key={day} className="border border-gray-200 dark:border-slate-700 px-1 py-2 sm:py-3 text-center font-semibold text-gray-800 dark:text-slate-100 whitespace-nowrap w-[35px]">
+                    <div className="text-xs sm:text-sm">{day}</div>
+                    <div className="text-[10px] sm:text-xs font-normal text-gray-500 dark:text-slate-400 mt-0.5" dir="ltr">{formatDDMM(dayDates[i])}</div>
                   </th>
                 ))}
-                <th className="border border-gray-200 dark:border-slate-700 px-3 py-3 text-center font-semibold text-gray-700 dark:text-slate-200 whitespace-nowrap">
+                <th className="border border-gray-200 dark:border-slate-700 px-1 sm:px-3 py-2 sm:py-3 text-center font-semibold text-gray-700 dark:text-slate-200 whitespace-nowrap">
                   סיכום
                 </th>
-                <th className="border border-gray-200 dark:border-slate-700 px-3 py-3 text-center font-semibold text-gray-700 dark:text-slate-200 whitespace-nowrap">
+                <th className="border border-gray-200 dark:border-slate-700 px-1 sm:px-3 py-2 sm:py-3 text-center font-semibold text-gray-700 dark:text-slate-200 whitespace-nowrap">
                   ממוצע / %
                 </th>
               </tr>

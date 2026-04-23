@@ -80,7 +80,7 @@ export function NumericRow({ habit, dayData, isEven, weekId: _weekId, isDragging
   return (
     <tr ref={setNodeRef} style={style} className={`${rowBg} border-t-2 border-t-gray-300 dark:border-t-slate-600 transition-opacity`}>
       {/* Habit name — sticky start-0 = right in RTL */}
-      <td className={`border border-gray-200 dark:border-slate-700 px-3 py-2 sticky start-0 z-10 ${rowBg} min-w-[160px] max-w-[220px]`}>
+      <td className={`border border-gray-200 dark:border-slate-700 px-2 py-2 sticky start-0 z-10 ${rowBg} w-auto min-w-[110px] max-w-[180px]`}>
         <div className="flex items-center gap-2">
           <button
             onClick={onArchive}
@@ -116,8 +116,8 @@ export function NumericRow({ habit, dayData, isEven, weekId: _weekId, isDragging
       </td>
       {/* Day cells */}
       {[0, 1, 2, 3, 4, 5, 6].map((day) => (
-        <td key={day} className="border border-gray-200 dark:border-slate-700 p-0 min-w-[60px]">
-          <div className="flex items-center justify-center min-h-[40px] px-1">
+        <td key={day} className="border border-gray-200 dark:border-slate-700 p-0 w-[35px]">
+          <div className="flex items-center justify-center min-h-[36px] px-0.5">
             {editingDay === day ? (
               <input
                 autoFocus

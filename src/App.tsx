@@ -42,28 +42,29 @@ export default function App() {
     <div dir="rtl" className="min-h-screen bg-gray-50 dark:bg-slate-900 font-sans transition-colors">
       <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Header */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-slate-100">📋 מעקב הרגלים</h1>
-          <div className="flex flex-wrap gap-2 items-center">
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-4 sm:gap-4 sm:mb-6">
+          <h1 className="text-lg sm:text-2xl font-bold text-gray-900 dark:text-slate-100">📋 מעקב הרגלים</h1>
+          <div className="flex flex-wrap gap-1.5 sm:gap-2 items-center">
             {/* Dark mode toggle */}
             <button
               onClick={toggleDark}
-              className="px-3 py-1.5 rounded-lg border border-gray-300 dark:border-slate-600 text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700 text-sm"
+              className="px-2 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm rounded-lg border border-gray-300 dark:border-slate-600 text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700"
               title={dark ? 'מצב יום' : 'מצב לילה'}
             >
-              {dark ? '☀️ יום' : '🌙 לילה'}
+              {dark ? '☀️' : '🌙'}
+              <span className="hidden sm:inline"> {dark ? 'יום' : 'לילה'}</span>
             </button>
             <button
               onClick={exportState}
-              className="px-3 py-1.5 rounded-lg border border-gray-300 dark:border-slate-600 text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700 text-sm"
+              className="px-2 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm rounded-lg border border-gray-300 dark:border-slate-600 text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700"
             >
-              ⬇ ייצוא JSON
+              ⬇ <span className="hidden sm:inline">ייצוא </span>JSON
             </button>
             <button
               onClick={() => importRef.current?.click()}
-              className="px-3 py-1.5 rounded-lg border border-gray-300 dark:border-slate-600 text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700 text-sm"
+              className="px-2 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm rounded-lg border border-gray-300 dark:border-slate-600 text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700"
             >
-              ⬆ ייבוא JSON
+              ⬆ <span className="hidden sm:inline">ייבוא </span>JSON
             </button>
             <input
               ref={importRef}
@@ -79,8 +80,8 @@ export default function App() {
         </div>
 
         {/* Main grid: tracker + rituals sidebar */}
-        <div className="grid grid-cols-4 gap-6 items-start">
-          <div className="col-span-3">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+          <div className="col-span-1 lg:col-span-3">
             {/* Affirmations */}
             <Affirmations />
 
@@ -95,6 +96,7 @@ export default function App() {
             </div>
 
             {/* Main table */}
+            <div className="block overflow-x-auto">
             <HabitTable
               habits={habitsForWeek}
               weekData={currentWeekData}
@@ -108,6 +110,7 @@ export default function App() {
               onUpdateGoal={updateHabitGoal}
               onReorder={reorderHabits}
             />
+            </div>
 
             {/* Add habit */}
             <div className="mt-4">

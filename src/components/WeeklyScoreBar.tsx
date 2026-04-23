@@ -19,12 +19,12 @@ export function WeeklyScoreBar({ habits, weekData }: Props) {
 
   return (
     <div
-      className={`w-full rounded-xl px-6 py-3 mb-3 flex items-center justify-center gap-4 shadow-sm transition-colors duration-300 ${bg} ${text}`}
+      className={`sticky top-0 z-20 w-full rounded-xl px-3 py-2 sm:px-6 sm:py-3 mb-3 flex items-center justify-center gap-3 sm:gap-4 shadow-sm transition-colors duration-300 ${bg} ${text}`}
     >
-      <span className="font-bold text-lg" style={{ fontFamily: 'Rubik, sans-serif' }}>
+      <span className="font-bold text-sm sm:text-lg" style={{ fontFamily: 'Rubik, sans-serif' }}>
         ציון שבועי כללי
       </span>
-      <span className="font-bold text-2xl">
+      <span className="font-bold text-xl sm:text-2xl">
         {score === null ? '— / 100' : `${score} / 100`}
       </span>
     </div>
