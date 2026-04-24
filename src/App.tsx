@@ -80,8 +80,13 @@ export default function App() {
           </div>
         </div>
 
-        {/* Main grid: tracker + rituals sidebar */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 items-start">
+        {/* Main grid: daily-focus | tracker | rituals (RTL: right→left) */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 items-start">
+          {/* Daily Focus — first in DOM = rightmost in RTL */}
+          <div className="col-span-1 order-first lg:order-none">
+            <DailyFocusSidebar />
+          </div>
+
           <div className="col-span-1 lg:col-span-3">
             {/* Affirmations */}
             <Affirmations />
@@ -137,9 +142,8 @@ export default function App() {
             </p>
           </div>
 
-          {/* Right sidebars */}
-          <div className="col-span-1 flex flex-col gap-4">
-            <DailyFocusSidebar />
+          {/* Rituals — last in DOM = leftmost in RTL */}
+          <div className="col-span-1">
             <RitualsSidebar weekId={state.currentWeekId} />
           </div>
         </div>
