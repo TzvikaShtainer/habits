@@ -1,5 +1,5 @@
-import { useRef, useState, useEffect, useCallback } from 'react';
-import { Group, Panel, Separator } from 'react-resizable-panels';
+import { useRef, useState, useEffect } from 'react';
+import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
 import { useAppState } from './hooks/useAppState';
 import { useDarkMode } from './hooks/useDarkMode';
 import { useIsMobile } from './hooks/useIsMobile';
@@ -12,31 +12,16 @@ import { SavedToast } from './components/SavedToast';
 import { RitualsSidebar } from './components/RitualsSidebar';
 import { DailyFocusSidebar } from './components/DailyFocusSidebar';
 
-const LAYOUT_KEY = 'habits-panel-layout';
-const DEFAULT_LAYOUT = { rituals: 20, main: 60, focus: 20 };
-
-function loadLayout() {
-  try {
-    const raw = localStorage.getItem(LAYOUT_KEY);
-    if (!raw) return DEFAULT_LAYOUT;
-    const parsed = JSON.parse(raw);
-    if (parsed.rituals && parsed.main && parsed.focus) return parsed;
-    return DEFAULT_LAYOUT;
-  } catch {
-    return DEFAULT_LAYOUT;
-  }
-}
-
 function ResizeHandle() {
   return (
-    <Separator className="group relative flex items-center justify-center w-2 cursor-col-resize hover:bg-blue-500/10 dark:hover:bg-blue-400/10 transition-colors z-10 flex-shrink-0">
-      <div className="absolute inset-y-0 left-1/2 -translate-x-1/2 w-px bg-gray-200 dark:bg-slate-700 group-hover:bg-blue-400 dark:group-hover:bg-blue-500 transition-colors" />
-      <div className="relative flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+    <PanelResizeHandle className="group relative w-2 flex items-center justify-center cursor-col-resize hover:bg-blue-500/10 dark:hover:bg-blue-400/10 transition-colors">
+      <div className="w-px h-full bg-gray-200 dark:bg-slate-700 group-hover:bg-blue-400 dark:group-hover:bg-blue-500 transition-colors pointer-events-none" />
+      <div className="absolute flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
         {[0, 1, 2].map(i => (
           <div key={i} className="w-1 h-1 rounded-full bg-blue-400 dark:bg-blue-500" />
         ))}
       </div>
-    </Separator>
+    </PanelResizeHandle>
   );
 }
 
@@ -54,11 +39,6 @@ export default function App() {
   const [showAddModal, setShowAddModal] = useState(false);
   const importRef = useRef<HTMLInputElement>(null);
   const isMobile = useIsMobile();
-  const [panelLayout] = useState(loadLayout);
-
-  const savePanelLayout = useCallback((layout: Record<string, number>) => {
-    localStorage.setItem(LAYOUT_KEY, JSON.stringify(layout));
-  }, []);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -175,19 +155,18 @@ export default function App() {
         </div>
       ) : (
         // Desktop: resizable 3-column layout
-        // dir="ltr" on the wrapper so drag physics work naturally;
+        // dir="ltr" wrapper so PanelGroup drag coordinates work correctly;
         // each panel re-applies dir="rtl" for Hebrew content.
         // DOM order (LTR): [Rituals LEFT] | [Main CENTER] | [Focus RIGHT]
-        <div dir="ltr" className="flex-1 overflow-hidden">
-          <Group
-            orientation="horizontal"
+        <div dir="ltr" className="flex-1 min-h-0 h-full">
+          <PanelGroup
+            direction="horizontal"
+            autoSaveId="habits-panel-layout"
             className="h-full"
-            defaultLayout={panelLayout}
-            onLayoutChanged={savePanelLayout}
           >
             {/* LEFT — Daily Rituals */}
-            <Panel id="rituals" defaultSize={20} minSize={15} maxSize={35} className="overflow-y-auto">
-              <div dir="rtl" className="p-3">
+            <Panel defaultSize={20} minSize={15} maxSize={35} className="overflow-y-auto">
+              <div dir="rtl" className="p-3 h-full">
                 <RitualsSidebar weekId={state.currentWeekId} />
               </div>
             </Panel>
@@ -195,7 +174,7 @@ export default function App() {
             <ResizeHandle />
 
             {/* CENTER — Main habits table */}
-            <Panel id="main" defaultSize={60} minSize={40} className="overflow-y-auto">
+            <Panel defaultSize={60} minSize={40} className="overflow-y-auto">
               <div dir="rtl" className="px-4 py-4">
                 {mainContent}
               </div>
@@ -204,12 +183,12 @@ export default function App() {
             <ResizeHandle />
 
             {/* RIGHT — Daily Focus */}
-            <Panel id="focus" defaultSize={20} minSize={15} maxSize={35} className="overflow-y-auto">
+            <Panel defaultSize={20} minSize={15} maxSize={35} className="overflow-y-auto">
               <div dir="rtl" className="p-3">
                 <DailyFocusSidebar />
               </div>
             </Panel>
-          </Group>
+          </PanelGroup>
         </div>
       )}
 
