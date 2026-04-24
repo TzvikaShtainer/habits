@@ -8,6 +8,7 @@ import { Affirmations } from './components/Affirmations';
 import { DailyReflection } from './components/DailyReflection';
 import { SavedToast } from './components/SavedToast';
 import { RitualsSidebar } from './components/RitualsSidebar';
+import { DailyFocusSidebar } from './components/DailyFocusSidebar';
 
 export default function App() {
   const {
@@ -136,8 +137,9 @@ export default function App() {
             </p>
           </div>
 
-          {/* Rituals sidebar */}
-          <div className="col-span-1">
+          {/* Right sidebars */}
+          <div className="col-span-1 flex flex-col gap-4">
+            <DailyFocusSidebar />
             <RitualsSidebar weekId={state.currentWeekId} />
           </div>
         </div>
