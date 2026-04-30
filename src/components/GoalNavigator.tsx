@@ -18,7 +18,7 @@ import { CSS } from '@dnd-kit/utilities';
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-type GoalTab = 'annual' | 'quarterly' | 'daily';
+type GoalTab = 'annual' | 'quarterly' | 'weekly' | 'daily';
 
 interface GoalItem {
   id: string;
@@ -40,6 +40,7 @@ interface GoalNavigatorData {
   activeTab: GoalTab;
   annual: GoalListItem[];
   quarterly: GoalListItem[];
+  weekly: GoalListItem[];
   daily: GoalListItem[];
 }
 
@@ -63,6 +64,7 @@ const DEFAULT_GOAL_COLOR = '#64748B';
 const TABS: { id: GoalTab; label: string; icon: string }[] = [
   { id: 'annual',    label: 'שנתי',    icon: '🌟' },
   { id: 'quarterly', label: 'רבעוני',  icon: '📅' },
+  { id: 'weekly',    label: 'שבועי',   icon: '📆' },
   { id: 'daily',     label: 'יומי',    icon: '✅' },
 ];
 
@@ -71,10 +73,12 @@ const TABS: { id: GoalTab; label: string; icon: string }[] = [
 function loadData(): GoalNavigatorData {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return { activeTab: 'annual', annual: [], quarterly: [], daily: [] };
-    return JSON.parse(raw);
+    if (!raw) return { activeTab: 'annual', annual: [], quarterly: [], weekly: [], daily: [] };
+    const parsed = JSON.parse(raw);
+    if (!parsed.weekly) parsed.weekly = [];
+    return parsed;
   } catch {
-    return { activeTab: 'annual', annual: [], quarterly: [], daily: [] };
+    return { activeTab: 'annual', annual: [], quarterly: [], weekly: [], daily: [] };
   }
 }
 
