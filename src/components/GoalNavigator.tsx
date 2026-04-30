@@ -93,7 +93,7 @@ interface ColorPickerProps {
 function ColorPicker({ current, onChange, onClose }: ColorPickerProps) {
   return (
     <div
-      className="absolute top-full mt-1.5 right-0 z-50 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 rounded-xl shadow-xl p-2.5 grid grid-cols-4 gap-1.5 w-max"
+      className="absolute top-full mt-2 left-0 z-50 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 rounded-xl shadow-xl p-2.5 grid grid-cols-4 gap-1.5 w-max"
       dir="ltr"
       onMouseDown={e => e.stopPropagation()}
     >
