@@ -22,7 +22,69 @@ body {
   animation: pop 0.42s cubic-bezier(0.36, 0.07, 0.19, 0.97);
 }
 
-/* Thin professional scrollbars for panel columns */
+/* ── react-big-calendar RTL & dark mode overrides ── */
+.rbc-rtl-wrapper .rbc-calendar {
+  direction: rtl;
+  font-family: 'Rubik', sans-serif;
+}
+
+/* Flip the time-gutter so it appears on the left in RTL */
+.rbc-rtl-wrapper .rbc-time-view .rbc-time-gutter {
+  order: -1;
+}
+
+/* Dark mode calendar */
+.dark .rbc-rtl-wrapper .rbc-calendar,
+.dark .rbc-rtl-wrapper .rbc-toolbar,
+.dark .rbc-rtl-wrapper .rbc-header,
+.dark .rbc-rtl-wrapper .rbc-month-header {
+  background-color: rgb(30 41 59); /* slate-800 */
+  color: rgb(226 232 240); /* slate-200 */
+  border-color: rgb(51 65 85); /* slate-700 */
+}
+
+.dark .rbc-rtl-wrapper .rbc-day-bg,
+.dark .rbc-rtl-wrapper .rbc-month-row,
+.dark .rbc-rtl-wrapper .rbc-time-slot,
+.dark .rbc-rtl-wrapper .rbc-time-content,
+.dark .rbc-rtl-wrapper .rbc-time-header-content {
+  background-color: rgb(15 23 42); /* slate-900 */
+  border-color: rgb(51 65 85);
+}
+
+.dark .rbc-rtl-wrapper .rbc-off-range-bg {
+  background-color: rgb(30 41 59);
+}
+
+.dark .rbc-rtl-wrapper .rbc-today {
+  background-color: rgb(30 58 138 / 0.25); /* blue tint */
+}
+
+.dark .rbc-rtl-wrapper .rbc-toolbar button {
+  color: rgb(148 163 184);
+  border-color: rgb(51 65 85);
+  background: transparent;
+}
+
+.dark .rbc-rtl-wrapper .rbc-toolbar button:hover {
+  background-color: rgb(51 65 85);
+  color: rgb(226 232 240);
+}
+
+.dark .rbc-rtl-wrapper .rbc-label,
+.dark .rbc-rtl-wrapper .rbc-date-cell {
+  color: rgb(148 163 184);
+}
+
+.dark .rbc-rtl-wrapper .rbc-current .rbc-button-link {
+  color: rgb(96 165 250); /* blue-400 */
+}
+
+.dark .rbc-rtl-wrapper .rbc-event {
+  background-color: rgb(37 99 235); /* blue-600 */
+}
+
+/* ── Thin professional scrollbars for panel columns ── */
 .panel-scroll::-webkit-scrollbar {
   width: 4px;
 }

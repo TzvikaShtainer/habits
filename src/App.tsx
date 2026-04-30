@@ -24,6 +24,8 @@ import { DailyFocusSidebar } from './components/DailyFocusSidebar';
 import { GoalNavigator } from './components/GoalNavigator';
 import { DailyJournal } from './components/DailyJournal';
 import { SortableWidget } from './components/SortableWidget';
+import { CenterTabs } from './components/CenterTabs';
+import { getWeekDayDates } from './utils/weekUtils';
 
 function ResizeHandle() {
   return (
@@ -155,6 +157,21 @@ export default function App() {
     ),
   };
 
+  // ── Habit completion by date (for calendar overlay) ──────────────────────
+  const completionByDate: Record<string, number> = {};
+  {
+    const weekDates = getWeekDayDates(state.currentWeekId);
+    const activeHabits = habitsForWeek.filter(h => h.type === 'binary');
+    if (activeHabits.length > 0) {
+      weekDates.forEach((date, dayIndex) => {
+        const done = activeHabits.filter(
+          h => (currentWeekData[h.id]?.[dayIndex] ?? 0) === 1,
+        ).length;
+        completionByDate[date] = Math.round((done / activeHabits.length) * 100);
+      });
+    }
+  }
+
   // ── Shared main column content ───────────────────────────────────────────
   const mainContent = (
     <DndContext
@@ -224,7 +241,9 @@ export default function App() {
         // Mobile: stacked vertically — Daily Focus → Table → Rituals
         <div dir="rtl" className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-6">
           <DailyFocusSidebar />
-          {mainContent}
+          <CenterTabs completionByDate={completionByDate}>
+            {mainContent}
+          </CenterTabs>
           <RitualsSidebar weekId={state.currentWeekId} />
         </div>
       ) : (
@@ -248,10 +267,12 @@ export default function App() {
 
             <ResizeHandle />
 
-            {/* CENTER — Main habits table */}
+            {/* CENTER — Main habits table + calendar tabs */}
             <Panel defaultSize={60} minSize={40}>
               <div dir="rtl" className="px-4 py-4 h-full overflow-y-auto panel-scroll">
-                {mainContent}
+                <CenterTabs completionByDate={completionByDate}>
+                  {mainContent}
+                </CenterTabs>
               </div>
             </Panel>
 
