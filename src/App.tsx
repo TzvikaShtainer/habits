@@ -1,5 +1,15 @@
-import { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { PanelGroup, Panel, PanelResizeHandle } from 'react-resizable-panels';
+import {
+  DndContext,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+  closestCenter,
+  type DragEndEvent,
+} from '@dnd-kit/core';
+import { SortableContext, verticalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { useAppState } from './hooks/useAppState';
 import { useDarkMode } from './hooks/useDarkMode';
 import { useIsMobile } from './hooks/useIsMobile';
@@ -12,6 +22,7 @@ import { SavedToast } from './components/SavedToast';
 import { RitualsSidebar } from './components/RitualsSidebar';
 import { DailyFocusSidebar } from './components/DailyFocusSidebar';
 import { GoalNavigator } from './components/GoalNavigator';
+import { SortableWidget } from './components/SortableWidget';
 
 function ResizeHandle() {
   return (
@@ -25,6 +36,9 @@ function ResizeHandle() {
     </PanelResizeHandle>
   );
 }
+
+const WIDGET_ORDER_KEY = 'center-widget-order';
+const DEFAULT_WIDGET_ORDER = ['affirmations', 'goalNavigator', 'habitsTable', 'dailyReflection'];
 
 export default function App() {
   const {
@@ -41,6 +55,42 @@ export default function App() {
   const importRef = useRef<HTMLInputElement>(null);
   const isMobile = useIsMobile();
 
+  // ── Widget order (persisted to localStorage) ─────────────────────────────
+  const [widgetOrder, setWidgetOrder] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem(WIDGET_ORDER_KEY);
+      if (saved) {
+        const parsed: unknown = JSON.parse(saved);
+        if (
+          Array.isArray(parsed) &&
+          DEFAULT_WIDGET_ORDER.every(id => (parsed as string[]).includes(id)) &&
+          (parsed as string[]).every(id => DEFAULT_WIDGET_ORDER.includes(id))
+        ) {
+          return parsed as string[];
+        }
+      }
+    } catch {}
+    return [...DEFAULT_WIDGET_ORDER];
+  });
+
+  const widgetSensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
+    useSensor(TouchSensor, { activationConstraint: { delay: 200, tolerance: 5 } }),
+  );
+
+  function handleWidgetDragEnd(event: DragEndEvent) {
+    const { active, over } = event;
+    if (over && active.id !== over.id) {
+      setWidgetOrder(prev => {
+        const oldIndex = prev.indexOf(active.id as string);
+        const newIndex = prev.indexOf(over.id as string);
+        const next = arrayMove(prev, oldIndex, newIndex);
+        localStorage.setItem(WIDGET_ORDER_KEY, JSON.stringify(next));
+        return next;
+      });
+    }
+  }
+
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
@@ -55,52 +105,73 @@ export default function App() {
   const currentWeekData = state.weeks[state.currentWeekId] ?? {};
   const habitsForWeek = state.habits.filter((h) => !h.archived);
 
-  // ── Shared main column content ───────────────────────────────────────────
-  const mainContent = (
-    <>
-      <Affirmations />
-      <GoalNavigator />
-      <div className="mb-6">
-        <WeekNav
-          currentWeekId={state.currentWeekId}
-          sortedWeekIds={sortedWeekIds}
-          onNavigate={navigateWeek}
-          onNewWeek={createNewWeek}
-        />
-      </div>
-      <div className="block overflow-x-auto">
-        <HabitTable
-          habits={habitsForWeek}
-          weekData={currentWeekData}
-          weekId={state.currentWeekId}
-          isCurrentWeek={true}
-          onCycleCell={cycleBinaryCell}
-          onSetBinaryCell={setBinaryCell}
-          onSetCell={(weekId, habitId, day, val) => setCellValue(weekId, habitId, day, val)}
-          onArchive={archiveHabit}
-          onRename={renameHabit}
-          onUpdateGoal={updateHabitGoal}
-          onReorder={reorderHabits}
-          onLoadExamples={loadExampleHabits}
-        />
-      </div>
-      <div className="mt-4">
-        <button
-          onClick={() => setShowAddModal(true)}
-          className="px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 text-sm font-medium"
-        >
-          + הוסף הרגל
-        </button>
-      </div>
+  // ── Widget content map ────────────────────────────────────────────────────
+  const widgetContent: Record<string, React.ReactNode> = {
+    affirmations: <Affirmations />,
+    goalNavigator: <GoalNavigator />,
+    habitsTable: (
+      <>
+        <div className="mb-6">
+          <WeekNav
+            currentWeekId={state.currentWeekId}
+            sortedWeekIds={sortedWeekIds}
+            onNavigate={navigateWeek}
+            onNewWeek={createNewWeek}
+          />
+        </div>
+        <div className="block overflow-x-auto">
+          <HabitTable
+            habits={habitsForWeek}
+            weekData={currentWeekData}
+            weekId={state.currentWeekId}
+            isCurrentWeek={true}
+            onCycleCell={cycleBinaryCell}
+            onSetBinaryCell={setBinaryCell}
+            onSetCell={(weekId, habitId, day, val) => setCellValue(weekId, habitId, day, val)}
+            onArchive={archiveHabit}
+            onRename={renameHabit}
+            onUpdateGoal={updateHabitGoal}
+            onReorder={reorderHabits}
+            onLoadExamples={loadExampleHabits}
+          />
+        </div>
+        <div className="mt-4">
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="px-4 py-2 rounded-lg bg-green-500 text-white hover:bg-green-600 text-sm font-medium"
+          >
+            + הוסף הרגל
+          </button>
+        </div>
+      </>
+    ),
+    dailyReflection: (
       <DailyReflection
         weekId={state.currentWeekId}
         reflections={state.reflections ?? {}}
         onSave={setReflection}
       />
+    ),
+  };
+
+  // ── Shared main column content ───────────────────────────────────────────
+  const mainContent = (
+    <DndContext
+      sensors={widgetSensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleWidgetDragEnd}
+    >
+      <SortableContext items={widgetOrder} strategy={verticalListSortingStrategy}>
+        {widgetOrder.map(id => (
+          <SortableWidget key={id} id={id}>
+            {widgetContent[id]}
+          </SortableWidget>
+        ))}
+      </SortableContext>
       <p className="mt-4 text-xs text-gray-400 dark:text-slate-600 text-center">
         ניווט: חצים · קיצורי מקלדת: 1=ירוק · 2=אדום · 3=שחור · 4=ריק · Ctrl+Z=ביטול
       </p>
-    </>
+    </DndContext>
   );
 
   return (
