@@ -238,10 +238,11 @@ export default function App() {
             autoSaveId="habits-panel-layout"
             className="h-full"
           >
-            {/* LEFT — Daily Rituals */}
+            {/* LEFT — Daily Rituals + Journal */}
             <Panel defaultSize={20} minSize={15} maxSize={35}>
               <div dir="rtl" className="p-3 h-full overflow-y-auto panel-scroll">
                 <RitualsSidebar weekId={state.currentWeekId} />
+                <DailyJournal />
               </div>
             </Panel>
 
@@ -256,11 +257,10 @@ export default function App() {
 
             <ResizeHandle />
 
-            {/* RIGHT — Daily Focus + Journal */}
+            {/* RIGHT — Daily Focus */}
             <Panel defaultSize={20} minSize={15} maxSize={35}>
               <div dir="rtl" className="p-3 h-full overflow-y-auto panel-scroll">
                 <DailyFocusSidebar />
-                <DailyJournal />
               </div>
             </Panel>
           </PanelGroup>
