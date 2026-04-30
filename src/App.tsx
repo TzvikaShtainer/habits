@@ -167,8 +167,8 @@ export default function App() {
             className="h-full"
           >
             {/* LEFT — Daily Rituals */}
-            <Panel defaultSize={20} minSize={15} maxSize={35} className="overflow-y-auto">
-              <div dir="rtl" className="p-3 h-full">
+            <Panel defaultSize={20} minSize={15} maxSize={35}>
+              <div dir="rtl" className="p-3 h-full overflow-y-auto panel-scroll">
                 <RitualsSidebar weekId={state.currentWeekId} />
               </div>
             </Panel>
@@ -176,8 +176,8 @@ export default function App() {
             <ResizeHandle />
 
             {/* CENTER — Main habits table */}
-            <Panel defaultSize={60} minSize={40} className="overflow-y-auto">
-              <div dir="rtl" className="px-4 py-4">
+            <Panel defaultSize={60} minSize={40}>
+              <div dir="rtl" className="px-4 py-4 h-full overflow-y-auto panel-scroll">
                 {mainContent}
               </div>
             </Panel>
@@ -185,8 +185,8 @@ export default function App() {
             <ResizeHandle />
 
             {/* RIGHT — Daily Focus */}
-            <Panel defaultSize={20} minSize={15} maxSize={35} className="overflow-y-auto">
-              <div dir="rtl" className="p-3">
+            <Panel defaultSize={20} minSize={15} maxSize={35}>
+              <div dir="rtl" className="p-3 h-full overflow-y-auto panel-scroll">
                 <DailyFocusSidebar />
               </div>
             </Panel>

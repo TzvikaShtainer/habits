@@ -8,6 +8,7 @@ export interface RitualQuestion {
 export interface RitualSection {
   id: string;
   title: string;
+  subtitle?: string;
   color: 'orange' | 'purple' | 'green';
   questions: RitualQuestion[];
   affirmation?: string;
@@ -102,5 +103,11 @@ export function useRituals() {
     return entries[key]?.[questionId] ?? '';
   }
 
-  return { sections, updateQuestion, setAnswer, getAnswer };
+  function updateSubtitle(sectionId: string, subtitle: string) {
+    setSections(prev =>
+      prev.map(s => (s.id === sectionId ? { ...s, subtitle } : s))
+    );
+  }
+
+  return { sections, updateQuestion, updateSubtitle, setAnswer, getAnswer };
 }

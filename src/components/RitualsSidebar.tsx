@@ -22,12 +22,12 @@ const COLOR_STYLES = {
 };
 
 export function RitualsSidebar({ weekId }: Props) {
-  const { sections, updateQuestion, setAnswer, getAnswer } = useRituals();
+  const { sections, updateQuestion, updateSubtitle, setAnswer, getAnswer } = useRituals();
   const [editingTemplate, setEditingTemplate] = useState(false);
   const [activeDay, setActiveDay] = useState(() => new Date().getDay());
 
   return (
-    <div className="sticky top-4 flex flex-col gap-3">
+    <div className="flex flex-col gap-3">
       {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="font-semibold text-gray-800 dark:text-slate-100 text-sm">📿 טקסים יומיים</h2>
@@ -71,7 +71,20 @@ export function RitualsSidebar({ weekId }: Props) {
             key={section.id}
             className={`rounded-xl border-2 ${styles.border} bg-white dark:bg-slate-800 shadow-sm p-3`}
           >
-            <h3 className={`font-semibold text-sm mb-2 ${styles.title}`}>{section.title}</h3>
+            <h3 className={`font-semibold text-sm ${styles.title}`}>{section.title}</h3>
+
+            {(section.id === 'morning' || section.id === 'night') && (
+              <input
+                type="text"
+                value={section.subtitle ?? ''}
+                onChange={e => updateSubtitle(section.id, e.target.value)}
+                placeholder="הוסף תת-כותרת..."
+                dir="rtl"
+                className="mt-0.5 mb-2 w-full text-xs text-gray-400 dark:text-slate-500 bg-transparent focus:outline-none placeholder:text-gray-300 dark:placeholder:text-slate-600 italic"
+              />
+            )}
+
+            {!(section.id === 'morning' || section.id === 'night') && <div className="mb-2" />}
 
             {!editingTemplate && !hasFilledQuestions ? (
               <p className="text-xs text-gray-400 dark:text-slate-500 italic">לחץ ✏️ להוספת שאלות</p>
