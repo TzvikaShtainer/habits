@@ -22,6 +22,7 @@ import { SavedToast } from './components/SavedToast';
 import { RitualsSidebar } from './components/RitualsSidebar';
 import { DailyFocusSidebar } from './components/DailyFocusSidebar';
 import { GoalNavigator } from './components/GoalNavigator';
+import { DailyJournal } from './components/DailyJournal';
 import { SortableWidget } from './components/SortableWidget';
 
 function ResizeHandle() {
@@ -255,10 +256,11 @@ export default function App() {
 
             <ResizeHandle />
 
-            {/* RIGHT — Daily Focus */}
+            {/* RIGHT — Daily Focus + Journal */}
             <Panel defaultSize={20} minSize={15} maxSize={35}>
               <div dir="rtl" className="p-3 h-full overflow-y-auto panel-scroll">
                 <DailyFocusSidebar />
+                <DailyJournal />
               </div>
             </Panel>
           </PanelGroup>
