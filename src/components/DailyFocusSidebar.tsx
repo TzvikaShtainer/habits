@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback } from 'react';
 import {
   DndContext,
   PointerSensor,
@@ -68,6 +68,8 @@ const HEADER_COLORS = [
   { value: '#10B981', label: 'ירוק' },
   { value: '#8B5CF6', label: 'סגול' },
   { value: '#F59E0B', label: 'כתום' },
+  { value: '#EC4899', label: 'ורוד' },
+  { value: '#14B8A6', label: 'טורקיז' },
   { value: '#EF4444', label: 'אדום' },
   { value: '#64748B', label: 'אפור' },
 ];
@@ -128,11 +130,9 @@ interface ColorPickerProps {
 }
 
 function ColorPicker({ current, onChange, onClose }: ColorPickerProps) {
-  const ref = useRef<HTMLDivElement>(null);
   return (
     <div
-      ref={ref}
-      className="absolute top-full mt-1 end-0 z-50 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 rounded-lg shadow-lg p-2 flex gap-1.5"
+      className="absolute top-full mt-2 left-0 z-50 bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 rounded-xl shadow-xl p-2.5 grid grid-cols-4 gap-1.5 w-max"
       dir="ltr"
       onMouseDown={e => e.stopPropagation()}
     >
@@ -141,11 +141,12 @@ function ColorPicker({ current, onChange, onClose }: ColorPickerProps) {
           key={c.value}
           title={c.label}
           onClick={() => { onChange(c.value); onClose(); }}
-          className="w-5 h-5 rounded-full border-2 transition-transform hover:scale-110 flex-shrink-0"
+          className="w-7 h-7 rounded-lg transition-all hover:scale-110 hover:shadow-md flex-shrink-0"
           style={{
             backgroundColor: c.value,
-            borderColor: current === c.value ? '#fff' : c.value,
-            outline: current === c.value ? `2px solid ${c.value}` : 'none',
+            border: current === c.value ? '2px solid white' : `2px solid ${c.value}44`,
+            outline: current === c.value ? `2.5px solid ${c.value}` : 'none',
+            outlineOffset: '1px',
           }}
         />
       ))}
@@ -207,7 +208,7 @@ function SortableHeader({ item, isFirst, onUpdate, onDelete }: SortableHeaderPro
         <button
           onClick={() => setShowPicker(v => !v)}
           onBlur={() => setTimeout(() => setShowPicker(false), 150)}
-          className="w-4 h-4 rounded-full border border-white/50 shadow-sm opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity flex-shrink-0"
+          className="w-5 h-5 rounded-full border-2 border-white dark:border-slate-700 shadow opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity flex-shrink-0"
           style={{ backgroundColor: item.color }}
           aria-label="שנה צבע"
         />

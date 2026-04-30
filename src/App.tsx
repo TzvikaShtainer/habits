@@ -11,6 +11,7 @@ import { DailyReflection } from './components/DailyReflection';
 import { SavedToast } from './components/SavedToast';
 import { RitualsSidebar } from './components/RitualsSidebar';
 import { DailyFocusSidebar } from './components/DailyFocusSidebar';
+import { GoalNavigator } from './components/GoalNavigator';
 
 function ResizeHandle() {
   return (
@@ -58,6 +59,7 @@ export default function App() {
   const mainContent = (
     <>
       <Affirmations />
+      <GoalNavigator />
       <div className="mb-6">
         <WeekNav
           currentWeekId={state.currentWeekId}
