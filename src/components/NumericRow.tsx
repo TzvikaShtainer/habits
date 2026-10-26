@@ -80,7 +80,7 @@ export function NumericRow({ habit, dayData, isEven, weekId: _weekId, isDragging
   return (
     <tr ref={setNodeRef} style={style} className={`${rowBg} border-t-2 border-t-gray-300 dark:border-t-slate-600 transition-opacity`}>
       {/* Habit name — sticky start-0 = right in RTL */}
-      <td className={`border border-gray-200 dark:border-slate-700 px-1.5 sm:px-2 py-2 sticky start-0 z-10 ${rowBg} w-auto min-w-[80px] max-w-[96px] sm:min-w-[110px] sm:max-w-[180px]`}>
+      <td className={`border border-gray-200 dark:border-slate-700 px-1.5 sm:px-2 py-2 sticky start-0 z-10 ${rowBg} w-auto min-w-[94px] max-w-[110px] sm:min-w-[110px] sm:max-w-[180px]`}>
         <div className="flex items-center gap-1.5 sm:gap-2">
           <button
             onClick={onArchive}
@@ -106,7 +106,7 @@ export function NumericRow({ habit, dayData, isEven, weekId: _weekId, isDragging
               onClick={() => setEditingName(true)}
               {...attributes}
               {...listeners}
-              className="flex-1 text-sm text-gray-800 dark:text-slate-200 cursor-grab active:cursor-grabbing hover:text-blue-600 dark:hover:text-blue-400 truncate select-none"
+              className="flex-1 text-sm text-gray-800 dark:text-slate-200 cursor-grab active:cursor-grabbing hover:text-blue-600 dark:hover:text-blue-400 min-w-0 break-words leading-snug sm:truncate select-none"
               title={`${habit.name} — לחץ לחיצה ארוכה לגרירה`}
             >
               {habit.name}

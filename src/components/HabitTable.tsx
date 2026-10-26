@@ -100,7 +100,7 @@ export function HabitTable({
           <table className="border-collapse sm:min-w-[560px] w-full text-xs sm:text-sm">
             <thead>
               <tr className="bg-gray-100 dark:bg-slate-800 sticky top-[52px] z-10">
-                <th className="border border-gray-200 dark:border-slate-700 px-1.5 sm:px-3 py-2 sm:py-3 text-start font-semibold text-gray-700 dark:text-slate-200 sticky start-0 z-20 bg-gray-100 dark:bg-slate-800 w-auto min-w-[80px] sm:min-w-[110px]">
+                <th className="border border-gray-200 dark:border-slate-700 px-1.5 sm:px-3 py-2 sm:py-3 text-start font-semibold text-gray-700 dark:text-slate-200 sticky start-0 z-20 bg-gray-100 dark:bg-slate-800 w-auto min-w-[94px] sm:min-w-[110px]">
                   שם ההרגל
                 </th>
                 {DAYS_HE.map((day, i) => (
