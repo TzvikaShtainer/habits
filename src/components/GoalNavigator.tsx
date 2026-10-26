@@ -62,10 +62,10 @@ const GOAL_COLORS = [
 const DEFAULT_GOAL_COLOR = '#64748B';
 
 const TABS: { id: GoalTab; label: string; icon: string }[] = [
-  { id: 'annual',    label: 'שנתי',    icon: '🌟' },
-  { id: 'quarterly', label: 'רבעוני',  icon: '📅' },
-  { id: 'weekly',    label: 'שבועי',   icon: '📆' },
   { id: 'daily',     label: 'יומי',    icon: '✅' },
+  { id: 'weekly',    label: 'שבועי',   icon: '📆' },
+  { id: 'quarterly', label: 'רבעוני',  icon: '📅' },
+  { id: 'annual',    label: 'שנתי',    icon: '🌟' },
 ];
 
 // ── Persistence ───────────────────────────────────────────────────────────────
