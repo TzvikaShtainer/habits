@@ -84,6 +84,15 @@ body {
   background-color: rgb(37 99 235); /* blue-600 */
 }
 
+/* ── Phones: 16px form text so iOS Safari doesn't zoom in on focus ── */
+@media (max-width: 1023px) {
+  input,
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+}
+
 /* ── Thin professional scrollbars for panel columns ── */
 .panel-scroll::-webkit-scrollbar {
   width: 4px;

@@ -17,7 +17,7 @@ export function SavedToast() {
 
   return (
     <div
-      className={`fixed bottom-4 start-4 z-50 transition-all duration-300 ${
+      className={`fixed top-16 lg:top-auto lg:bottom-4 start-4 z-50 transition-all duration-300 ${
         visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 pointer-events-none'
       }`}
     >

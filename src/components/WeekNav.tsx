@@ -13,7 +13,7 @@ export function WeekNav({ currentWeekId, sortedWeekIds, onNavigate, onNewWeek }:
   const hasNext = currentIndex < sortedWeekIds.length - 1;
 
   return (
-    <div className="flex justify-center items-center gap-6 flex-wrap">
+    <div className="flex justify-center items-center gap-x-3 gap-y-2 sm:gap-6 flex-wrap">
       <button
         onClick={() => hasPrev && onNavigate(sortedWeekIds[currentIndex - 1])}
         disabled={!hasPrev}

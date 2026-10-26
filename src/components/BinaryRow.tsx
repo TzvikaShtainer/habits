@@ -132,8 +132,8 @@ export function BinaryRow({
   return (
     <tr ref={setNodeRef} style={style} className={`${rowBg} transition-opacity`}>
       {/* Habit name — sticky start-0 = right in RTL */}
-      <td className={`border border-gray-200 dark:border-slate-700 px-2 py-2 sticky start-0 z-10 ${rowBg} w-auto min-w-[110px] max-w-[180px]`}>
-        <div className="flex items-center gap-2">
+      <td className={`border border-gray-200 dark:border-slate-700 px-1.5 sm:px-2 py-2 sticky start-0 z-10 ${rowBg} w-auto min-w-[80px] max-w-[96px] sm:min-w-[110px] sm:max-w-[180px]`}>
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <button
             onClick={onArchive}
             className="text-gray-300 dark:text-slate-600 hover:text-red-400 transition-colors flex-shrink-0 text-base leading-none"

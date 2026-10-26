@@ -43,6 +43,14 @@ function ResizeHandle() {
 const WIDGET_ORDER_KEY = 'center-widget-order';
 const DEFAULT_WIDGET_ORDER = ['affirmations', 'goalNavigator', 'habitsTable', 'dailyReflection'];
 
+const MOBILE_SECTION_KEY = 'mobile-section';
+const MOBILE_SECTIONS = [
+  { id: 'main', label: 'הרגלים', icon: '📋' },
+  { id: 'focus', label: 'מיקוד יומי', icon: '🎯' },
+  { id: 'rituals', label: 'טקסים ויומן', icon: '🌙' },
+] as const;
+type MobileSection = (typeof MOBILE_SECTIONS)[number]['id'];
+
 export default function App() {
   const {
     state, sortedWeekIds,
@@ -57,6 +65,17 @@ export default function App() {
   const [showAddModal, setShowAddModal] = useState(false);
   const importRef = useRef<HTMLInputElement>(null);
   const isMobile = useIsMobile();
+
+  // ── Mobile bottom-nav section (per-device preference) ────────────────────
+  const [mobileSection, setMobileSection] = useState<MobileSection>(() => {
+    const saved = localStorage.getItem(MOBILE_SECTION_KEY);
+    return MOBILE_SECTIONS.some(s => s.id === saved) ? (saved as MobileSection) : 'main';
+  });
+
+  function selectMobileSection(id: MobileSection) {
+    setMobileSection(id);
+    localStorage.setItem(MOBILE_SECTION_KEY, id);
+  }
 
   // ── Widget order (persisted to localStorage) ─────────────────────────────
   const [widgetOrder, setWidgetOrder] = useState<string[]>(() => {
@@ -186,14 +205,14 @@ export default function App() {
           </SortableWidget>
         ))}
       </SortableContext>
-      <p className="mt-4 text-xs text-gray-400 dark:text-slate-600 text-center">
+      <p className="hidden lg:block mt-4 text-xs text-gray-400 dark:text-slate-600 text-center">
         ניווט: חצים · קיצורי מקלדת: 1=ירוק · 2=אדום · 3=שחור · 4=ריק · Ctrl+Z=ביטול
       </p>
     </DndContext>
   );
 
   return (
-    <div dir="rtl" className="h-screen flex flex-col bg-gray-50 dark:bg-slate-900 font-sans transition-colors overflow-hidden">
+    <div dir="rtl" className="h-screen h-[100dvh] flex flex-col bg-gray-50 dark:bg-slate-900 font-sans transition-colors overflow-hidden">
 
       {/* ── Header ── */}
       <div className="flex-shrink-0 border-b border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800/50">
@@ -238,14 +257,44 @@ export default function App() {
 
       {/* ── Content ── */}
       {isMobile ? (
-        // Mobile: stacked vertically — Daily Focus → Table → Rituals
-        <div dir="rtl" className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-6">
-          <DailyFocusSidebar />
-          <CenterTabs completionByDate={completionByDate}>
-            {mainContent}
-          </CenterTabs>
-          <RitualsSidebar weekId={state.currentWeekId} />
-        </div>
+        // Mobile: one section at a time, switched from a bottom tab bar
+        <>
+          <div dir="rtl" className="flex-1 min-h-0 overflow-y-auto px-3 py-4">
+            {mobileSection === 'focus' && <DailyFocusSidebar />}
+            {mobileSection === 'main' && (
+              // Plain wrapper so CenterTabs' h-full resolves to auto height
+              // and the content grows instead of overflowing.
+              <div>
+                <CenterTabs completionByDate={completionByDate}>
+                  {mainContent}
+                </CenterTabs>
+              </div>
+            )}
+            {mobileSection === 'rituals' && (
+              <div className="flex flex-col gap-6">
+                <RitualsSidebar weekId={state.currentWeekId} />
+                <DailyJournal />
+              </div>
+            )}
+          </div>
+          <nav className="flex-shrink-0 grid grid-cols-3 border-t border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-800 pb-[env(safe-area-inset-bottom)]">
+            {MOBILE_SECTIONS.map(s => (
+              <button
+                key={s.id}
+                onClick={() => selectMobileSection(s.id)}
+                className={[
+                  'flex flex-col items-center gap-0.5 py-2 text-xs font-medium transition-colors',
+                  mobileSection === s.id
+                    ? 'text-blue-600 dark:text-blue-400'
+                    : 'text-gray-500 dark:text-slate-400',
+                ].join(' ')}
+              >
+                <span className="text-lg leading-none">{s.icon}</span>
+                {s.label}
+              </button>
+            ))}
+          </nav>
+        </>
       ) : (
         // Desktop: resizable 3-column layout
         // dir="ltr" wrapper so PanelGroup drag coordinates work correctly;
