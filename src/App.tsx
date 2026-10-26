@@ -24,6 +24,8 @@ import { DailyFocusSidebar } from './components/DailyFocusSidebar';
 import { GoalNavigator } from './components/GoalNavigator';
 import { DailyJournal } from './components/DailyJournal';
 import { SortableWidget } from './components/SortableWidget';
+import { supabase } from './lib/supabase';
+import { signOut } from './lib/cloudSync';
 
 function ResizeHandle() {
   return (
@@ -234,6 +236,15 @@ export default function App() {
                 if (file) { importState(file); e.target.value = ''; }
               }}
             />
+            {supabase && (
+              <button
+                onClick={() => { if (confirm('להתנתק? המידע נשאר שמור בענן.')) void signOut(); }}
+                className="px-2 py-1 text-xs sm:px-3 sm:py-1.5 sm:text-sm rounded-lg border border-gray-300 dark:border-slate-600 text-gray-600 dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors"
+                title="התנתקות"
+              >
+                ⎋<span className="hidden sm:inline"> התנתקות</span>
+              </button>
+            )}
           </div>
         </div>
       </div>
