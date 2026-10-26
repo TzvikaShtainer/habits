@@ -70,15 +70,16 @@ const TABS: { id: GoalTab; label: string; icon: string }[] = [
 
 // ── Persistence ───────────────────────────────────────────────────────────────
 
+// Always opens on the daily tab, regardless of the tab last viewed.
 function loadData(): GoalNavigatorData {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return { activeTab: 'annual', annual: [], quarterly: [], weekly: [], daily: [] };
+    if (!raw) return { activeTab: 'daily', annual: [], quarterly: [], weekly: [], daily: [] };
     const parsed = JSON.parse(raw);
     if (!parsed.weekly) parsed.weekly = [];
-    return parsed;
+    return { ...parsed, activeTab: 'daily' };
   } catch {
-    return { activeTab: 'annual', annual: [], quarterly: [], weekly: [], daily: [] };
+    return { activeTab: 'daily', annual: [], quarterly: [], weekly: [], daily: [] };
   }
 }
 
