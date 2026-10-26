@@ -24,8 +24,6 @@ import { DailyFocusSidebar } from './components/DailyFocusSidebar';
 import { GoalNavigator } from './components/GoalNavigator';
 import { DailyJournal } from './components/DailyJournal';
 import { SortableWidget } from './components/SortableWidget';
-import { CenterTabs } from './components/CenterTabs';
-import { getWeekDayDates } from './utils/weekUtils';
 
 function ResizeHandle() {
   return (
@@ -176,21 +174,6 @@ export default function App() {
     ),
   };
 
-  // ── Habit completion by date (for calendar overlay) ──────────────────────
-  const completionByDate: Record<string, number> = {};
-  {
-    const weekDates = getWeekDayDates(state.currentWeekId);
-    const activeHabits = habitsForWeek.filter(h => h.type === 'binary');
-    if (activeHabits.length > 0) {
-      weekDates.forEach((date, dayIndex) => {
-        const done = activeHabits.filter(
-          h => (currentWeekData[h.id]?.[dayIndex] ?? 0) === 1,
-        ).length;
-        completionByDate[date] = Math.round((done / activeHabits.length) * 100);
-      });
-    }
-  }
-
   // ── Shared main column content ───────────────────────────────────────────
   const mainContent = (
     <DndContext
@@ -261,15 +244,7 @@ export default function App() {
         <>
           <div dir="rtl" className="flex-1 min-h-0 overflow-y-auto px-3 py-4">
             {mobileSection === 'focus' && <DailyFocusSidebar />}
-            {mobileSection === 'main' && (
-              // Plain wrapper so CenterTabs' h-full resolves to auto height
-              // and the content grows instead of overflowing.
-              <div>
-                <CenterTabs completionByDate={completionByDate}>
-                  {mainContent}
-                </CenterTabs>
-              </div>
-            )}
+            {mobileSection === 'main' && mainContent}
             {mobileSection === 'rituals' && (
               <div className="flex flex-col gap-6">
                 <RitualsSidebar weekId={state.currentWeekId} />
@@ -319,9 +294,7 @@ export default function App() {
             {/* CENTER — Main habits table + calendar tabs */}
             <Panel defaultSize={60} minSize={40}>
               <div dir="rtl" className="px-4 py-4 h-full overflow-y-auto panel-scroll">
-                <CenterTabs completionByDate={completionByDate}>
-                  {mainContent}
-                </CenterTabs>
+                {mainContent}
               </div>
             </Panel>
 
